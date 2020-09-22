@@ -82,25 +82,27 @@ surveys[1,6]
 surveys[, 6]
 
 # first column of the data frame (as a data frame)
-
+head(surveys[1])
 # first row (as a data frame)
-
+head(surveys[1, ])
 
 # first three elements in the 7th column (as a vector)
-
+surveys[1:3, 7]
 
 # the 3rd row of the data frame (as a data.frame)
-
+surveys[3, ]
 
 # equivalent to head(metadata)
 
-
+head(surveys)
+surveys[1:6, ]
 # looking at the 1:6 more closely
-
+1:6
 
 # we also use other objects to specify the range
 
-
+rows <- 6
+surveys[rows,1]
 
 #
 # Challenge: Using slicing, see if you can produce the same result as:
@@ -110,30 +112,42 @@ surveys[, 6]
 # i.e., print just last 6 rows of the surveys dataframe
 #
 # Solution:
-
-
+end <- nrow(surveys)
+surveys[34781:34786, ]
+nrow(surveys)
+surveys[(end-5):end, ]
 
 # We can omit (leave out) columns using '-'
-
-
+surveys[-1]            #get rid of column 1
+surveys[c(-1, -3, -4)]   #get rid of columns 1, 3 and 4)
+surveys[-(1:3)]           #remove a range
 
 # column "names" can be used in place of the column numbers
-
+surveys["month"]  #getting data fram from a column using the name instead of column number
 
 
 #
 # Topic: Factors (for categorical data)
 #
-
+gender <- c("male", "male", "female")
+gender <- factor(c("male", "female", "female"))
+class(gender)
+levels(gender)
+nlevels(gender)
 
 # factors have an order
-
-
+temperature <- factor(c("hot", "cold", "hot", "warm"))
+temperature[1]                                                                                   #default level is alphabetical
+temperature <- factor( c("hot", "cold","hot","warm"), level = c("cold", "warm", "hot"))          #but we can tell it how we should assign the levels
 # Converting factors
-
+as.numeric(temperature)
+as.character(temperature)
 
 # can be tricky if the levels are numbers
-
+year <- factor(c(1990, 1983, 1977, 1998, 1990))
+as.numeric(year)                      #changes to numbers in order e.g., 1977 =1, 1983 = 2 etc.)
+as.character(year)                    #changes to characters e.g. "1977", "1983" etc.
+as.numeric(as.character(year))        #changes back to original numbers
 
 # so does our survey data have any factors
 
