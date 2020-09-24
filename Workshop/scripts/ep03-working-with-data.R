@@ -32,8 +32,15 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 # Lets get started!
 #------------------
 
+install.packages("tidyverse")
+library(tidyverse)
+#dplyr and tidyr
 
+#Load data set
+surveys <- read_csv("data_raw/portal_data_joined.csv")
 
+#Check Structure
+str(surveys)
 
 
 
@@ -41,16 +48,36 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 # Selecting columns & filtering rows
 #-----------------------------------
 
+#Selecting columns
 
+select(surveys, plot_id, species_id, weight)
 
+#De-select columns
+select(surveys,-record_id, -species_id)
 
+#Filtering
+#Filter for a particular year
+filter(surveys, year == 1995)
 
+#And to save the filtered data as an element for later
+surveys_1995 <- filter(surveys, year == 1995)
+
+surveys2 <- filter(surveys, weight < 5)
+surveys_sml <- select(surveys2, species_id, sex, weight)
+
+surveys_sml <- select(filter(surveys, weight < 5), species_id, sex, weight)
 
 
 #-------
 # Pipes
 #-------
+#The pipe _--> %>%
+#Shortcut -- Ctrl +shift +m or commmand +shift +m
 
+
+surveys_sml <- surveys %>% 
+  filter(weight < 5 ) %>% 
+  select(species_id, sex, weight)
 
 
 
@@ -64,15 +91,29 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 # retain only the columns ```year```, ```sex```, and ```weight```.
 
 
+surveys %>% 
+  filter( year < 1995 ) %>% 
+  select (year, sex, weight)
 
-
+#order of columns is how they will show in the data frame
 
 #--------
 # Mutate
 #--------
 
+#mutate lets you make a new column while retaining the preexisting columns.
 
+#for exmaple, to mutate the weight in grams, to weight in kgs and pounds
+surveys_weights <- surveys %>% 
+  mutate(weight_kg = weight / 1000, weight_lb = weight_kg * 2.2) %>% 
+  head()
 
+#we have a lot of "nas", so we might want to get rid of them
+
+surveys %>% 
+  filter(!is.na(weight)) %>% 
+  mutate(weight_kg = weight/1000) %>% 
+  head(5)
 
 
 
@@ -88,7 +129,12 @@ download.file(url = "https://ndownloader.figshare.com/files/2292169",
 # Hint: think about how the commands should be ordered to produce this data frame!
 
 
-
+surveys_hindfoot <- surveys %>% 
+  filter(!is.na(hindfoot_length)) %>%
+  mutate(hindfoot_cm = hindfoot_length*10) %>% 
+  filter(hindfoot_cm < 3) %>% 
+  select(species_id, hindfoot_cm)
+                      
 
 
 #---------------------
